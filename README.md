@@ -1,6 +1,8 @@
 # CCDGUT Network Cracker - Router version
 使用本程序，可解除东莞理工学院城市学院校园网的多客户端检测
 
+注意：仅能在路由器上工作
+
 仅使用KERNEL API，无其它多余的库，可静态编译
 
 仅处理上行且远程端口为80的TCP数据包，不影响下行速率
