@@ -248,7 +248,7 @@ int secure_write(int fd, char *buf, int n) {
     int nwrite = 0, write_return;
 
     while (n > 0) {
-        write_return = write(fd, buf, n);
+        write_return = write(fd, buf + nwrite, n);
         if (write_return < 0) {
             perror("write()");
             return nwrite;
