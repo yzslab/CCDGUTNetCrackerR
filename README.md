@@ -1,9 +1,9 @@
 # CCDGUT Network Cracker - Router version
 使用本程序，可解除东莞理工学院城市学院校园网的多客户端检测
 
-注意：仅能在路由器上工作
+注意：此程序仅能在路由器上工作
 
-仅使用KERNEL API，无其它多余的库，可静态编译
+仅使用KERNEL API，无其它多余的库，可静态编译；USER SPACE程序，非内核模块，无需KERNEL HEADER即可编译（虽然KERNEL SPACE的效率更高，实现更容易，但是嵌入式设备一般拿不到KERNEL HEADER）
 
 仅处理上行且远程端口为80的TCP数据包，不影响下行速率
 
@@ -33,6 +33,16 @@ CCDGUTNetCrackerR switch0 daemon
 ```
 CCDGUTNetCrackerR switch0 syslog
 ```
+
+## F.A.Q.
+### 如何结束程序
+给程序发送以下任意一个信号即可：SIGTERM、SIGINT、SIGHUP、SIGQUIT，注意尽量不要使用SIGKILL，这样操作会导致你无法上网：
+```
+killall -TERM CCDGUTNetCrackerR
+```
+### 程序退出后，无法访问HTTP网页
+一般程序被强制结束或者程序异常退出后会出现这种情况，重新执行一次程序即可，如果不需要程序运行，执行后发送以下任意一个信号结束程序即可恢复：SIGTERM、SIGINT、SIGHUP、SIGQUIT
+
 ## 协议
 [GNU GENERAL PUBLIC LICENSE Version 3](https://www.gnu.org/licenses/gpl-3.0.en.html)
 
