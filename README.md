@@ -16,7 +16,7 @@ gcc main.c -o CCDGUTNetCrackerR
 ```
 启用调试日志：
 ```
-gcc -DENABLE_LOG -o CCDGUTNetCrackerR
+gcc -DENABLE_LOG main.c -o CCDGUTNetCrackerR
 ```
 
 ## 使用方法
