@@ -1,7 +1,7 @@
 # CCDGUT Network Cracker - Router version
 使用本程序，可解除东莞理工学院城市学院校园网的多客户端检测
 
-注意：此程序仅能在路由器上工作
+注意：此程序仅能在使用Linux Kernel的路由器（例如OpenWRT）上工作
 
 仅使用KERNEL API，无其它多余的库，可静态编译；USER SPACE程序，非内核模块，无需KERNEL HEADER即可编译（虽然KERNEL SPACE的效率更高，实现更容易，但是嵌入式设备一般拿不到KERNEL HEADER）
 
