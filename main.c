@@ -346,11 +346,13 @@ static int packet_filter(char *data, size_t len) {
     static const char post_str[] = "POST /";
     static const char http_host_str[] = " HTTP/1.1\r\n";
     static const char user_agent_start_keyword[] = "\r\nUser-Agent: ";
-    static const size_t max_uri = 4096;
+    static char user_agnet_replace_with[] = "Tnega-Resu";
 
 #ifdef ENABLE_LOG
-    char uri[max_uri];
+#define buffer_size 4096
+    static char string_buffer[buffer_size];
 #endif
+
     int i = 0;
 
 #ifdef ENABLE_LOG
@@ -390,10 +392,11 @@ static int packet_filter(char *data, size_t len) {
         return 0;
     }
 
-    char *uri_end = strnstr(uri_start, " HTTP/", size_after_uri_start);
+    size_t search_size = header_end - uri_start; // Search between uri_start and header_end
 
-    // GET /Foobar\r\n\r\n HTTP/
-    if (uri_end == NULL || uri_end > header_end) {
+    char *uri_end = strnstr(uri_start, " HTTP/", search_size);
+
+    if (uri_end == NULL) {
 #ifdef ENABLE_LOG
         logger("http request header not found [4], ");
 #endif
@@ -405,18 +408,18 @@ static int packet_filter(char *data, size_t len) {
     // Retrieve request uri
     size_t uri_length = uri_end - uri_start;
     logger("retrieve request uri, ");
-    if (uri_length >= max_uri - 1) {
+    if (uri_length >= buffer_size - 1) {
         logger("request URI too long, ");
     } else {
-        memcpy(uri, uri_start, uri_length);
-        uri[uri_length] = '\0';
+        memcpy(string_buffer, uri_start, uri_length);
+        string_buffer[uri_length] = '\0';
         logger("[%d] URI /", uri_length);
-        logger("%s", uri);
+        logger("%s", string_buffer);
         logger(", ");
     }
 #endif
 
-    size_t search_size = header_end - uri_end;
+     search_size = header_end - uri_end; // Search between uri_end and header_end
 
     // Find user agent header in http header
     char *user_agent_pointer = strnstr(uri_end, user_agent_start_keyword, search_size);
@@ -429,6 +432,8 @@ static int packet_filter(char *data, size_t len) {
         return 0;
     }
 
+
+#ifdef ENABLE_LOG
     char *user_agent_content_start_position = NULL;
     char *user_agent_content_end_position = NULL;
 
@@ -438,18 +443,31 @@ static int packet_filter(char *data, size_t len) {
                                               len - (user_agent_content_start_position - data));
 
     if (user_agent_content_end_position == NULL) {
-#ifdef ENABLE_LOG
         logger("key content not found [2], ");
-#endif
         return 0;
     }
 
-#ifdef ENABLE_LOG
     logger("key content found, ");
-    logger("modify it, ");
+    // Retrieve user-agent
+    size_t user_agent_length = user_agent_content_end_position - user_agent_content_start_position;
+    logger("retrieve User-Agent, ");
+    if (user_agent_length >= buffer_size - 1) {
+        logger("User-Agent too long, ");
+    } else {
+        memcpy(string_buffer, user_agent_content_start_position, user_agent_length);
+        string_buffer[user_agent_length] = '\0';
+        logger("[%d] User-Agnet: ", user_agent_length);
+        logger("%s", string_buffer);
+        logger(", ");
+    }
+    logger("replace User-Agent with Tnega-Resu, ");
 #endif
+
     // Simply replace the user agent with blank spaces
-    memset(user_agent_content_start_position, ' ', user_agent_content_end_position - user_agent_content_start_position);
+    // memset(user_agent_content_start_position, ' ', user_agent_content_end_position - user_agent_content_start_position);
+
+    // Simply replace "User-Agent" with "Tnega-Resu"
+    memcpy(user_agent_pointer + 2, user_agnet_replace_with, sizeof(user_agnet_replace_with) - 1);
     return 1;
 }
 
