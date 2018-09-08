@@ -344,9 +344,11 @@ void tcp_checksum(struct iphdr *ip_header, uint16_t *tcp_header, int tcp_length)
 static int packet_filter(char *data, size_t len) {
     static const char get_str[] = "GET /";
     static const char post_str[] = "POST /";
-    static const char http_host_str[] = " HTTP/1.1\r\n";
+    static const char http_uri_end_str[] = " HTTP/1.1\r\n";
+    // static const char http_uri_end_legacy_str[] = " HTTP/1.0\r\n"; // Legacy version
     static const char user_agent_start_keyword[] = "\r\nUser-Agent: ";
-    static char user_agnet_replace_with[] = "Tnega-Resu";
+    static const char user_agent_start_lower_case_keyword[] = "\r\nuser-agent: ";
+    static const char user_agnet_replace_with[] = "Tnega-Resu";
 
 #ifdef ENABLE_LOG
 #define buffer_size 4096
@@ -358,7 +360,7 @@ static int packet_filter(char *data, size_t len) {
 #ifdef ENABLE_LOG
     logger("find header start tag, ");
 #endif
-    if (len <= sizeof(post_str) + sizeof(http_host_str)) {
+    if (len <= sizeof(post_str) + sizeof(http_uri_end_str)) {
 #ifdef ENABLE_LOG
         logger("http request header not found [1], ");
 #endif
@@ -380,6 +382,7 @@ static int packet_filter(char *data, size_t len) {
     char *uri_start = data + i;
     size_t size_after_uri_start = len - i;
 
+    /*
     // Is there any header end tag?
 #ifdef ENABLE_LOG
     logger("find header end tag, ");
@@ -391,10 +394,12 @@ static int packet_filter(char *data, size_t len) {
 #endif
         return 0;
     }
+     */
 
-    size_t search_size = header_end - uri_start; // Search between uri_start and header_end
+    // size_t search_size = header_end - uri_start; // Search between uri_start and header_end
+    size_t search_size = size_after_uri_start;
 
-    char *uri_end = strnstr(uri_start, " HTTP/", search_size);
+    char *uri_end = strnstr(uri_start, http_uri_end_str, search_size);
 
     if (uri_end == NULL) {
 #ifdef ENABLE_LOG
@@ -419,10 +424,12 @@ static int packet_filter(char *data, size_t len) {
     }
 #endif
 
-     search_size = header_end - uri_end; // Search between uri_end and header_end
+     search_size = len - (uri_end - data); // Search after uri_end
 
-    // Find user agent header in http header
+    // Find user agent header in http header, hope that the URI won't be too long, so URI and User-Agent can appear in one packet
     char *user_agent_pointer = strnstr(uri_end, user_agent_start_keyword, search_size);
+    if (user_agent_pointer == NULL)
+        user_agent_pointer = strnstr(uri_end, user_agent_start_lower_case_keyword, search_size);
 
 
     if (user_agent_pointer == NULL) {
