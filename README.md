@@ -22,9 +22,10 @@
 ##### 以OpenWRT为例
 下面的命令将下载最新的Release版程序并存放到/usr/sbin/CCDGUTNetCrackerR：
 ```
-# 注意这下载地址并不是HTTPS的，而且不是从GITHUB的Release服务器下载的，
+# 注意这里的下载地址并不是HTTPS的，而且不是从GITHUB的Release服务器下载的。
 # 因为OpenWRT自带的wget不支持HTTPS，Amazon S3国内也不好访问。
-# 注重安全的下载后请验证MD5值：http://ccdgut-net-cracker.yuninter.net/latest/md5sum.txt
+# 注重安全的下载后请验证MD5值：https://ccdgut-net-cracker.yuninter.net/latest/md5sum.txt
+# 如果你安装了支持https的wget/curl以及CA证书，可自行把http替换为https。
 wget -O- http://ccdgut-net-cracker.yuninter.net/latest/CCDGUTNetCrackerR-mipsel-static > /usr/sbin/CCDGUTNetCrackerR
 md5sum /usr/sbin/CCDGUTNetCrackerR # v0.1.3-alpha的CCDGUTNetCrackerR-mipsel-staticMD5值为cf618dadcfdd94adc145ba8c2b2a21a3  
 chmod +x /usr/sbin/CCDGUTNetCrackerR
