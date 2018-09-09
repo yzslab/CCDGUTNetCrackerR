@@ -55,7 +55,7 @@ CCDGUTNetCrackerR switch0 daemon
 ```
 例：使用syslog记录调试信息（仅定义了"ENABLE_LOG"宏才会输出调试信息，调试信息默认输出到stdout）
 ```
-CCDGUTNetCrackerR switch0 syslog
+CCDGUTNetCrackerR switch0 daemon syslog
 ```
 
 ### 设置程序开机自启动
