@@ -9,8 +9,27 @@
 
 基于链路层处理数据包，效率高，兼容性好
 
-## 编译方法
-直接使用gcc即可：
+## 开始使用
+
+### 获取程序
+获取程序有两种途径，一种是直接获取已预先编译好的Release版本，另一只是获取源码自行编译。
+#### 途径一：使用Release版本
+使用mipsel架构的路由器比较多，因此Release版目前仅提供mipsel架构的二进制可执行文件。
+
+一般都可以直接使用CDGUTNetCrackerR-mipsel-static，如无法使用，请下载toolchain自行编译。
+##### 以OpenWRT为例
+下面的命令将下载最新的Release版程序并存放到/usr/sbin/CCDGUTNetCrackerR：
+```
+# 注意这下载地址并不是HTTPS的，而且不是从GITHUB的Release服务器下载的，
+# 因为OpenWRT自带的wget不支持HTTPS，Amazon S3国内也不好访问。
+# 注重安全的下载后请验证MD5值：http://ccdgut-net-cracker.yuninter.net/latest/md5sum.txt
+wget -O- http://ccdgut-net-cracker.yuninter.net/latest/CCDGUTNetCrackerR-mipsel-static > /usr/sbin/CCDGUTNetCrackerR
+md5sum /usr/sbin/CCDGUTNetCrackerR # v0.1.3-alpha的CCDGUTNetCrackerR-mipsel-staticMD5值为cf618dadcfdd94adc145ba8c2b2a21a3  
+chmod +x /usr/sbin/CCDGUTNetCrackerR
+```
+
+#### 途径二：获取源码自行编译
+下载toolchain，直接使用gcc即可（注意把gcc替换成你的toolchain的gcc的路径）：
 ```
 gcc main.c -o CCDGUTNetCrackerR
 ```
@@ -19,7 +38,7 @@ gcc main.c -o CCDGUTNetCrackerR
 gcc -DENABLE_LOG main.c -o CCDGUTNetCrackerR
 ```
 
-## 使用方法
+### 使用方法
 ```
 CCDGUTNetCrackerR 与内网连接的网络接口名 [daemon] [syslog]
 ```
@@ -35,6 +54,27 @@ CCDGUTNetCrackerR switch0 daemon
 ```
 CCDGUTNetCrackerR switch0 syslog
 ```
+
+### 设置程序开机自启动
+把程序的执行命令加入到/etc/rc.local即可。
+
+首先删除/etc/rc.local中已有的且与本程序相关的启动命令：
+```
+sed -i "/CCDGUTNetCrackerR/d" /etc/rc.local
+```
+查看/etc/rc.local有没有exit 0
+```
+cat /etc/rc.local | grep "exit 0"
+```
+如果有输出exit 0，则执行（注意把br-lan替换为路由器连接内网的网络接口名）：
+```
+sed -i "/exit 0/i/usr/sbin/CCDGUTNetCrackerR br-lan daemon" /etc/rc.local
+```
+否则（注意把br-lan替换为路由器连接内网的网络接口名）：
+```
+echo /usr/sbin/CCDGUTNetCrackerR br-lan daemon >> /etc/rc.local
+```
+
 
 ## F.A.Q.
 ### 如何结束程序
