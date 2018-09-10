@@ -88,6 +88,10 @@ killall -TERM CCDGUTNetCrackerR
 ### 程序退出后，无法访问HTTP网页
 一般程序被强制结束或者程序异常退出后会出现这种情况，重新执行一次程序即可，如果不需要程序运行，执行后发送以下任意一个信号结束程序即可恢复：SIGTERM、SIGINT、SIGHUP、SIGQUIT
 
+## 相关项目
+城院校园网账号自动认证：[CCDGUTNetAuth](https://github.com/yzsme/CCDGUTNetAuth)
+中兴&天翼自动认证(虽然现在不需要中兴认证了，但是天翼认证部分还能正常使用)：[zte-client](https://github.com/yzsme/zte-client)
+
 ## 协议
 [GNU GENERAL PUBLIC LICENSE Version 3](https://www.gnu.org/licenses/gpl-3.0.en.html)
 
