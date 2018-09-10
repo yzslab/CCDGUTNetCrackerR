@@ -90,6 +90,7 @@ killall -TERM CCDGUTNetCrackerR
 
 ## 相关项目
 城院校园网账号自动认证：[CCDGUTNetAuth](https://github.com/yzsme/CCDGUTNetAuth)
+
 中兴&天翼自动认证(虽然现在不需要中兴认证了，但是天翼认证部分还能正常使用)：[zte-client](https://github.com/yzsme/zte-client)
 
 ## 协议
