@@ -1,6 +1,6 @@
 # CCDGUT Network Cracker - Router version
 
-![#f03c15](https://placehold.it/15/f03c15/000000?text=+) **★ 声明：本程序的作者与一切销售网络设备的人员无任何合作关系，不仅目前没有，未来也不会有。**
+![#f03c15](https://placehold.it/15/f03c15/000000?text=+) **★ 声明：本项目的创建者与一切销售网络设备的人员无任何合作关系，以前没有，目前没有，未来也不会有。**
 
 
 
