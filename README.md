@@ -1,4 +1,9 @@
 # CCDGUT Network Cracker - Router version
+
+![#f03c15](https://placehold.it/15/f03c15/000000?text=+) **★ 声明：本程序的作者与一切销售网络设备的人员无任何合作关系，不仅目前没有，未来也不会有。**
+
+
+
 使用本程序，可解除东莞理工学院城市学院校园网的多客户端检测
 
 注意：此程序仅能在使用Linux Kernel的路由器（例如OpenWRT）上工作
