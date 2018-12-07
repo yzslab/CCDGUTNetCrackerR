@@ -1,7 +1,9 @@
 # CCDGUT Network Cracker - Router version
 
-![#f03c15](https://placehold.it/15/f03c15/000000?text=+) **★ 声明：本项目的创建者与一切销售或推广网络设备的人员无任何合作关系，且不销售或推广任何相关设备，以前没有，目前没有，未来也不会有。**
+![#f03c15](https://placehold.it/15/0000ff/000000?text=+) **★ 协议：[GNU GENERAL PUBLIC LICENSE Version 3](https://www.gnu.org/licenses/gpl-3.0.en.html)**
 
+
+![#f03c15](https://placehold.it/15/f03c15/000000?text=+) ★ 声明：本项目的创建者与一切销售或推广网络设备的人员无任何合作关系，且不销售或推广任何相关设备，以前没有，目前没有，未来也不会有。
 
 
 使用本程序，可解除东莞理工学院城市学院校园网的多客户端检测
