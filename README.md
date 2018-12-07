@@ -35,15 +35,12 @@ Fix incorrect checksum on some nic.
 使用mipsel架构的路由器比较多，因此Release版目前仅提供mipsel架构的二进制可执行文件。
 
 一般都可以直接使用CDGUTNetCrackerR-mipsel-static，如无法使用，请下载toolchain自行编译。
-##### 以OpenWRT为例
-下面的命令将下载最新的Release版程序并存放到/usr/sbin/CCDGUTNetCrackerR：
+##### 例
+下面的命令将下载Release版程序并存放到/usr/sbin/CCDGUTNetCrackerR：
 ```
-# 注意这里的下载地址并不是HTTPS的，而且不是从GITHUB的Release服务器下载的。
-# 因为OpenWRT自带的wget不支持HTTPS，Amazon S3国内也不好访问。
-# 注重安全的下载后请验证MD5值：https://ccdgut-net-cracker.yuninter.net/latest/md5sum.txt
-# 如果你安装了支持https的wget/curl以及CA证书，可自行把http替换为https。
-wget -O- http://ccdgut-net-cracker.yuninter.net/latest/CCDGUTNetCrackerR-mipsel-static > /usr/sbin/CCDGUTNetCrackerR
-md5sum /usr/sbin/CCDGUTNetCrackerR # v0.1.3-alpha的CCDGUTNetCrackerR-mipsel-staticMD5值为cf618dadcfdd94adc145ba8c2b2a21a3  
+wget -O- RELEASE_FILE_URL > /usr/sbin/CCDGUTNetCrackerR.bz2
+md5sum /usr/sbin/CCDGUTNetCrackerR.bz2
+bunzip /usr/sbin/CCDGUTNetCrackerR.bz2
 chmod +x /usr/sbin/CCDGUTNetCrackerR
 ```
 
