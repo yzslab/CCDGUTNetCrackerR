@@ -22,6 +22,7 @@
 #include <stdarg.h>
 #include <syslog.h>
 #include <signal.h>
+#include <time.h>
 
 static pid_t who_lock(int fd);
 
@@ -55,6 +56,8 @@ static void nolog(const char *, ...);
 
 static int packet_filter(char *data, size_t len);
 
+static char *randString(char *str, size_t size);
+
 static void (*logger)(const char *, ...) = myLog;
 
 static const char *tun_dev_name = "rsck_o";
@@ -71,6 +74,8 @@ static const char const *firewall_delete_forward_allow = "iptables -D FORWARD -m
 static const char *firewall_add_mangle_port_80_drop_command;
 static const char *firewall_delete_mangle_port_80_drop_command;
 
+static char user_agnet_replace_with[] = "Tnega-Resu";
+
 int main(int argc, char *argv[]) {
     if (argc == 1) {
         fprintf(stderr, "Usage: %s device [daemon] [syslog].\n", argv[0]);
@@ -78,6 +83,10 @@ int main(int argc, char *argv[]) {
     }
 
     lock_file(1); // Try to lock file
+
+    randString(user_agnet_replace_with, sizeof(user_agnet_replace_with));
+
+    printf("Random string: %s\n", user_agnet_replace_with);
 
     // Create a IP raw socket
     int raw_socket_fd = init_ip_raw_socket(argv[1], ETH_P_IP);
@@ -348,7 +357,6 @@ static int packet_filter(char *data, size_t len) {
     // static const char http_uri_end_legacy_str[] = " HTTP/1.0\r\n"; // Legacy version
     static const char user_agent_start_keyword[] = "\r\nUser-Agent: ";
     static const char user_agent_start_lower_case_keyword[] = "\r\nuser-agent: ";
-    static const char user_agnet_replace_with[] = "Tnega-Resu";
 
 #ifdef ENABLE_LOG
 #define buffer_size 4096
@@ -439,7 +447,6 @@ static int packet_filter(char *data, size_t len) {
         return 0;
     }
 
-#if defined(COMPATIBLE_MODE) || defined(ENABLE_LOG)
     char *user_agent_content_start_position = NULL;
     char *user_agent_content_end_position = NULL;
 
@@ -456,12 +463,15 @@ static int packet_filter(char *data, size_t len) {
     }
 
     size_t user_agent_length = user_agent_content_end_position - user_agent_content_start_position;
-#endif
 
 #ifdef COMPATIBLE_MODE
-    if (strnstr(user_agent_content_start_position, "Android", user_agent_length) == NULL && strnstr(user_agent_content_start_position, "Mac OS", user_agent_length) == NULL) {
+    if (
+            strnstr(user_agent_content_start_position, "Android", user_agent_length) == NULL &&
+            strnstr(user_agent_content_start_position, "Mac OS", user_agent_length) == NULL &&
+            strnstr(user_agent_content_start_position, "iOS", user_agent_length) == NULL
+       ) {
 #ifdef ENABLE_LOG
-        logger("keyword Android or Mac OS not found, ");
+        logger("keyword Android, iOS or Mac OS not found, ");
 #endif
         return 0;
     }
@@ -480,13 +490,13 @@ static int packet_filter(char *data, size_t len) {
         logger("%s", string_buffer);
         logger(", ");
     }
-    logger("replace User-Agent with Tnega-Resu, ");
+    logger("replace User-Agent with random string, ");
 #endif
 
-    // Simply replace the user agent with blank spaces
-    // memset(user_agent_content_start_position, ' ', user_agent_content_end_position - user_agent_content_start_position);
+    // Replace the user agent content with blank spaces
+    memset(user_agent_content_start_position, ' ', user_agent_length);
 
-    // Simply replace "User-Agent" with "Tnega-Resu"
+    // Replace "User-Agent" with random string
     memcpy(user_agent_pointer + 2, user_agnet_replace_with, sizeof(user_agnet_replace_with) - 1);
     return 1;
 }
@@ -621,4 +631,19 @@ static void logToSyslog(const char *s, ...) {
 
 static void nolog(const char *s, ...) {
 
+}
+
+static char *randString(char *str, size_t size)
+{
+    srand(time(NULL));
+    const char charset[] = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJK";
+    if (size) {
+        --size;
+        for (size_t n = 0; n < size; n++) {
+            int key = rand() % (int) (sizeof charset - 1);
+            str[n] = charset[key];
+        }
+        str[size] = '\0';
+    }
+    return str;
 }
