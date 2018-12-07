@@ -509,7 +509,7 @@ void package_processor(int raw) {
         if ((len = recvfrom(raw, packet_buffer, 2048, 0, (struct sockaddr *) &packet_info, &packet_info_size)) == -1) {
             perror("recvfrom()");
         } else {
-            ip_len = len - sizeof(struct ethhdr);
+            ip_len = ip_len = ntohs(ip_header->tot_len);;
 
             // logger("IPv%d, protocol: %d, ", ip_header->version, ip_header->protocol);
             if (ip_header->version == 4) {
@@ -562,7 +562,7 @@ void package_processor(int raw) {
                         }
 
                         // Sent the new packet via tun device
-                        secure_write(tap_fd, buffer, ip_len);
+                        secure_write(tap_fd, buffer, len - sizeof(struct ethhdr));
 
 #ifdef ENABLE_LOG
                         logger("\n\n");
