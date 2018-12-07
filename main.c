@@ -439,8 +439,7 @@ static int packet_filter(char *data, size_t len) {
         return 0;
     }
 
-
-#ifdef ENABLE_LOG
+#if defined(COMPATIBLE_MODE) || defined(ENABLE_LOG)
     char *user_agent_content_start_position = NULL;
     char *user_agent_content_end_position = NULL;
 
@@ -450,13 +449,27 @@ static int packet_filter(char *data, size_t len) {
                                               len - (user_agent_content_start_position - data));
 
     if (user_agent_content_end_position == NULL) {
+#ifdef ENABLE_LOG
         logger("key content not found [2], ");
+#endif
         return 0;
     }
 
+    size_t user_agent_length = user_agent_content_end_position - user_agent_content_start_position;
+#endif
+
+#ifdef COMPATIBLE_MODE
+    if (strnstr(user_agent_content_start_position, "Android", user_agent_length) == NULL && strnstr(user_agent_content_start_position, "Mac OS", user_agent_length) == NULL) {
+#ifdef ENABLE_LOG
+        logger("keyword Android or Mac OS not found, ");
+#endif
+        return 0;
+    }
+#endif
+
+#ifdef ENABLE_LOG
     logger("key content found, ");
     // Retrieve user-agent
-    size_t user_agent_length = user_agent_content_end_position - user_agent_content_start_position;
     logger("retrieve User-Agent, ");
     if (user_agent_length >= buffer_size - 1) {
         logger("User-Agent too long, ");

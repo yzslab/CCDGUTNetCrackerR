@@ -16,6 +16,14 @@
 
 **使用后，若觉得效果不错，欢迎点击右上角的"★ Star" (#^.^#)**
 
+## Update logs
+
+### v0.1.6 - 2018-12-07
+Add compatible mode.
+
+### v0.1.5 - 2018-12-07
+Fix incorrect checksum on some nic.
+
 ## 开始使用
 
 ### 获取程序
@@ -37,10 +45,16 @@ chmod +x /usr/sbin/CCDGUTNetCrackerR
 ```
 
 #### 途径二：获取源码自行编译
-下载toolchain，直接使用gcc即可（注意把gcc替换成你的toolchain的gcc的路径）：
+下载toolchain，直接使用gcc即可（注意把gcc替换成你的toolchain的gcc的路径），默认为严格模式：
 ```
 gcc main.c -o CCDGUTNetCrackerR
 ```
+
+启用兼容模式(仅对Android、iPhone以及Mac设备应用)
+```
+gcc -DCOMPATIBLE_MODE main.c -o CCDGUTNetCrackerR
+```
+
 启用调试日志：
 ```
 gcc -DENABLE_LOG main.c -o CCDGUTNetCrackerR
