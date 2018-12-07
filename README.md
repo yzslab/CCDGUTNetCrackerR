@@ -18,6 +18,9 @@
 
 ## Update logs
 
+### v0.1.8 - 2018-12-08
+Update anti multi device detection policy.
+
 ### v0.1.6 - 2018-12-07
 Add compatible mode.
 
